@@ -1,0 +1,42 @@
+{
+    "name": "WASM-4 Rust Development",
+    "image": "mcr.microsoft.com/devcontainers/rust:1-bullseye",
+    // Features to install
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        },
+        "ghcr.io/devcontainers/features/git:1": {
+            "version": "latest"
+        }
+    },
+    // Configure tool-specific properties
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "rust-lang.rust-analyzer",
+                "tamasfe.even-better-toml",
+                "serayuzgur.crates",
+                "vadimcn.vscode-lldb"
+            ],
+            "settings": {
+                "rust-analyzer.cargo.target": "wasm32-unknown-unknown",
+                "rust-analyzer.checkOnSave.allTargets": false
+            }
+        }
+    },
+    // Use 'postCreateCommand' to run commands after the container is created
+    "postCreateCommand": "bash .devcontainer/setup.sh",
+    // Set environment variables
+    "remoteEnv": {
+        "CARGO_TARGET_DIR": "${containerWorkspaceFolder}/target"
+    },
+    // Forward ports for local development/testing
+    "forwardPorts": [
+        4000,
+        8080
+    ],
+    // Uncomment to connect as root instead
+    // "remoteUser": "root"
+    "remoteUser": "vscode"
+}
