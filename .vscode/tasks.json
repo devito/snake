@@ -1,0 +1,41 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build WASM-4 Cart",
+            "type": "shell",
+            "command": "./build.sh",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Run WASM-4",
+            "type": "shell",
+            "command": "w4 run cart.wasm",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Build WASM-4 Cart"
+            ],
+            "isBackground": true
+        },
+        {
+            "label": "Watch and Run",
+            "type": "shell",
+            "command": "w4 watch",
+            "problemMatcher": [],
+            "isBackground": true
+        },
+        {
+            "label": "Bundle HTML",
+            "type": "shell",
+            "command": "w4 bundle cart.wasm --title 'Snake Game' --html snake-game.html",
+            "problemMatcher": [],
+            "dependsOn": [
+                "Build WASM-4 Cart"
+            ]
+        }
+    ]
+}

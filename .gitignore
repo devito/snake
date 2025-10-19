@@ -1,0 +1,22 @@
+# Rust
+/target/
+Cargo.lock
+
+# WASM-4 output
+cart.wasm
+cart-opt.wasm
+*.html
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Debug files
+*.pdb

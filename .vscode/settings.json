@@ -1,0 +1,12 @@
+{
+    "rust-analyzer.cargo.target": "wasm32-unknown-unknown",
+    "rust-analyzer.checkOnSave.allTargets": false,
+    "rust-analyzer.checkOnSave.command": "check",
+    "editor.formatOnSave": true,
+    "[rust]": {
+        "editor.defaultFormatter": "rust-lang.rust-analyzer"
+    },
+    "files.watcherExclude": {
+        "**/target/**": true
+    }
+}

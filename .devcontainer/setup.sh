@@ -10,6 +10,7 @@ sudo chown -R vscode:vscode /usr/local/rustup 2>/dev/null || true
 # Reinstall stable toolchain to ensure all components work properly
 rustup toolchain uninstall stable 2>/dev/null || true
 rustup toolchain install stable
+
 rustup default stable
 rustup target add wasm32-unknown-unknown
 

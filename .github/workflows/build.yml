@@ -1,0 +1,76 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        target: wasm32-unknown-unknown
+        override: true
+        components: rustfmt, clippy
+    
+    - name: Install wasm-opt
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y binaryen
+    
+    - name: Cache cargo registry
+      uses: actions/cache@v3
+      with:
+        path: ~/.cargo/registry
+        key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+    
+    - name: Cache cargo index
+      uses: actions/cache@v3
+      with:
+        path: ~/.cargo/git
+        key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+    
+    - name: Cache target directory
+      uses: actions/cache@v3
+      with:
+        path: target
+        key: ${{ runner.os }}-target-${{ hashFiles('**/Cargo.lock') }}
+    
+    - name: Check formatting
+      run: cargo fmt -- --check
+    
+    - name: Run clippy
+      run: cargo clippy --target wasm32-unknown-unknown -- -D warnings
+    
+    - name: Build
+      run: chmod +x build.sh && ./build.sh
+    
+    - name: Verify size limit
+      run: |
+        SIZE=$(wc -c < cart.wasm)
+        LIMIT=65535
+        echo "Cart size: $SIZE bytes"
+        echo "Size limit: $LIMIT bytes"
+        if [ $SIZE -gt $LIMIT ]; then
+          echo "❌ Cart exceeds size limit!"
+          exit 1
+        else
+          echo "✅ Cart is within size limit!"
+        fi
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: cart
+        path: cart.wasm
